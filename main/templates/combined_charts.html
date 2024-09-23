@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Charts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'student_list' %}"><img src="{% static 'image/logo.png' %}" alt="Logo" width="80" height="40" class="d-inline-block align-top"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav" style="right: 0; position: flex; margin-left: 700px;">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_list' %}">Student</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'export_students_excel' %}">Export</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dropout_chart' %}">Dropout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'enrollment_comparison_chart' %}">Enrollment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Metrics Section -->
+            <div class="col-12 mb-4">
+                <h2>Education Metrics</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5>Total Students</h5>
+                        <p>{{ total_students }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Enrolled Students</h5>
+                        <p>{{ enrolled_students }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Enrollment Rate</h5>
+                        <p>{{ enrollment_rate }}%</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Dropout Rate</h5>
+                        <p>{{ dropout_rate }}%</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Average Student Performance</h5>
+                        <p>{{ average_performance }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Performance by Subject</h5>
+                        <ul>
+                            {% for subject in performance_by_subject %}
+                            <li>{{ subject.subject }}: {{ subject.avg_score }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- First Chart (Dropout vs Enrolled Students) -->
+            <div class="col-lg-6 col-md-6 mb-4">
+                <h2>Dropout vs Enrolled Students</h2>
+                {{ dropout_chart|safe }} <!-- Render the dropout chart -->
+            </div>
+
+            <!-- Second Chart (Test Scores by Subject) -->
+            <div class="col-lg-6 col-md-6 mb-4">
+                <h2>Average Test Scores by Subject</h2>
+                {{ test_scores_chart|safe }} <!-- Render the test scores chart -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <h5 class="text-uppercase">Quality Education Dashboard</h5>
+                    <p>
+                        Tracking education metrics, dropout rates, and student performance to ensure
+                        quality education for all.
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'student_list' %}" class="text-dark">Student List</a></li>
+                        <li><a href="{% url 'export_students_excel' %}" class="text-dark">Export to Excel</a></li>
+                        <li><a href="{% url 'dropout_chart' %}" class="text-dark">Dropout Chart</a></li>
+                        <li><a href="{% url 'enrollment_comparison_chart' %}" class="text-dark">Enrollment
+                                Comparison</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-dark">Email Us</a></li>
+                        <li><a href="#" class="text-dark">Call Us</a></li>
+                        <li><a href="#" class="text-dark">Follow on Social Media</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center p-3 bg-light">
+            &copy; 2024 Quality Education Dashboard. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
