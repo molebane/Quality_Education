@@ -30,4 +30,7 @@ urlpatterns = [
     path('export-students/', export_students_excel, name='export_students'),
     path('dropout-chart/', views.dropout_chart, name='dropout_chart'),
     path('enrollment-comparison/', views.enrollment_comparison_chart, name='enrollment_comparison_chart'),
+    path('student/<int:student_id>/learning-path/', views.student_learning_path, name='student_learning_path'),
+    path('student/<int:student_id>/test-scores/', views.student_test_scores, name='student_test_scores'),
+    path('student/<int:student_id>/average-score/', views.average_test_score, name='average_test_score'),
 ]

@@ -178,3 +178,56 @@ def calculate_metrics_and_charts(request):
     }
 
     return render(request, 'combined_charts.html', context)
+
+
+    # update
+
+    # 1. StudentProfile ViewSet
+class StudentProfileViewSet(viewsets.ModelViewSet):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
+
+
+# 2. LearningPath ViewSet
+class LearningPathViewSet(viewsets.ModelViewSet):
+    queryset = LearningPath.objects.all()
+    serializer_class = LearningPathSerializer
+
+
+# 3. TestScore ViewSet
+class TestScoreViewSet(viewsets.ModelViewSet):
+    queryset = TestScore.objects.all()
+    serializer_class = TestScoreSerializer
+
+
+# 4. View to display Learning Path for a specific student
+def student_learning_path(request, student_id):
+    student_profile = get_object_or_404(StudentProfile, id=student_id)
+    learning_path = LearningPath.objects.filter(student=student_profile)
+
+    return render(request, 'education/student_learning_path.html', {
+        'student_profile': student_profile,
+        'learning_path': learning_path,
+    })
+
+
+# 5. View to display Test Scores for a specific student
+def student_test_scores(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    test_scores = TestScore.objects.filter(student=student)
+
+    return render(request, 'education/student_test_scores.html', {
+        'student': student,
+        'test_scores': test_scores,
+    })
+
+
+# 6. View to display the average test score for a student
+def average_test_score(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    average_score = TestScore.objects.filter(student=student).aggregate(Avg('score'))['score__avg']
+
+    return render(request, 'education/student_average_score.html', {
+        'student': student,
+        'average_score': average_score,
+    })

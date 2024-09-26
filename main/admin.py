@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Region, School, Student, TestScore
+from .models import Region, School, Student, TestScore, StudentProfile, LearningPath, TestScore
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 
@@ -21,3 +21,26 @@ class StudentAdmin(ImportExportModelAdmin):
 
 # Register TestScore model
 admin.site.register(TestScore)
+
+
+# update
+
+
+class StudentProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'school', 'learning_level', 'current_subject')
+    search_fields = ('user__username', 'school__name', 'current_subject__name')
+    list_filter = ('school', 'learning_level')
+
+# Register LearningPath Model
+@admin.register(LearningPath)
+class LearningPathAdmin(admin.ModelAdmin):
+    list_display = ('student', 'lesson', 'completed')
+    search_fields = ('student__user__username', 'lesson__title')
+    list_filter = ('completed', 'lesson__subject')
+
+# Register TestScore Model
+@admin.register(TestScore)
+class TestScoreAdmin(admin.ModelAdmin):
+    list_display = ('student', 'lesson', 'score')
+    search_fields = ('student__name', 'lesson__title')
+    list_filter = ('lesson__subject', 'score')
