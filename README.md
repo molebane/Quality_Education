@@ -82,3 +82,8 @@ bash
 python manage.py runserver
 
 Access the App: Open your web browser and go to http://127.0.0.1:8000 to view the app.
+![Screenshot (6)](https://github.com/user-attachments/assets/4e5337d5-0240-41d4-97f5-3a8ca6549c8f)
+![Screenshot (7)](https://github.com/user-attachments/assets/ccaed040-63f6-4eaa-952e-1208b53e2e2c)
+![Screenshot (8)](https://github.com/user-attachments/assets/a4b5a380-b180-4f1b-b5de-b2dd8de08c2f)
+![Screenshot (9)](https://github.com/user-attachments/assets/ad10fb85-6233-48da-b821-03f898d56000)
+
