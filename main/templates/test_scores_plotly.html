@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,24 +12,30 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'student_list' %}">Quality Education</a>
+            <a class="navbar-brand" href="{% url 'student_list' %}"><img src="{% static 'image/logo.png' %}" alt="Logo" width="80" height="40" class="d-inline-block align-top"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav" style="right: 0; position: flex; margin-left: 700px;">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'student_list' %}">Student List</a>
+                        <a class="nav-link" href="{% url 'student_list' %}">Student</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'export_students_excel' %}">Export Students to Excel</a>
+                        <a class="nav-link" href="{% url 'export_students_excel' %}">Export</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dropout_chart' %}">Dropout Chart</a>
+                        <a class="nav-link" href="{% url 'dropout_chart' %}">Dropout</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'test_scores_plotly' %}">Test Scores Chart</a>
+                        <a class="nav-link" href="{% url 'enrollment_comparison_chart' %}">Enrollment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'education_metrics' %}">Metrics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Login</a>
                     </li>
                 </ul>
             </div>
@@ -43,7 +49,44 @@
             {{ chart|safe }} <!-- Render the Plotly chart here -->
         </div>
     </div>
-
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <h5 class="text-uppercase">Quality Education Dashboard</h5>
+                    <p>
+                        Tracking education metrics, dropout rates, and student performance to ensure
+                        quality education for all.
+                    </p>
+                </div>
+    
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'student_list' %}" class="text-dark">Student List</a></li>
+                        <li><a href="{% url 'export_students_excel' %}" class="text-dark">Export to Excel</a></li>
+                        <li><a href="{% url 'dropout_chart' %}" class="text-dark">Dropout Chart</a></li>
+                        <li><a href="{% url 'enrollment_comparison_chart' %}" class="text-dark">Enrollment
+                                Comparison</a></li>
+                    </ul>
+                </div>
+    
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-dark">Email Us</a></li>
+                        <li><a href="#" class="text-dark">Call Us</a></li>
+                        <li><a href="#" class="text-dark">Follow on Social Media</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+        <div class="text-center p-3 bg-light">
+            &copy; 2024 Quality Education Dashboard. All rights reserved.
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

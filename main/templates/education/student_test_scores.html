@@ -1,6 +1,8 @@
 <h1>Test Scores for {{ student.name }}</h1>
 <ul>
     {% for score in test_scores %}
-        <li>{{ score.lesson.title }}: {{ score.score }}</li>
+    <li>{{ score.lesson.title }}: {{ score.score }}</li>
+    {% else %}
+    <li>No test scores available for this student.</li>
     {% endfor %}
 </ul>

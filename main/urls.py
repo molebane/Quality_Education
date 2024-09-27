@@ -9,6 +9,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import RegionViewSet, SchoolViewSet, StudentViewSet, TestScoreViewSet
+from .views import education_metrics_view
 
 
 # Create a router and register your viewsets
@@ -33,4 +34,7 @@ urlpatterns = [
     path('student/<int:student_id>/learning-path/', views.student_learning_path, name='student_learning_path'),
     path('student/<int:student_id>/test-scores/', views.student_test_scores, name='student_test_scores'),
     path('student/<int:student_id>/average-score/', views.average_test_score, name='average_test_score'),
+    path('students/', views.student_list, name='student_list'),
+    path('students/<int:student_id>/', views.student_detail, name='student_detail'),
+    path('education/metrics/', education_metrics_view, name='education_metrics'),
 ]

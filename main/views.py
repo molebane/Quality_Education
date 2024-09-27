@@ -1,18 +1,15 @@
 from django.shortcuts import render
-from .models import Student
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .models import TestScore, School, Region
-from .serializers import TestScoreSerializer
+from .models import TestScore, School, Region, Student, StudentProfile, LearningPath
 from django.db.models import Avg
 import pandas as pd
 import plotly.express as px
 from django.http import HttpResponse
-from rest_framework import viewsets
-from .models import Region, School, Student, TestScore
-from .serializers import RegionSerializer, SchoolSerializer, StudentSerializer, TestScoreSerializer
-from django.db.models import Count
+from .serializers import RegionSerializer, SchoolSerializer, StudentSerializer, TestScoreSerializer, StudentProfileSerializer, LearningPathSerializer
 from django.db.models import Avg, Count, Sum
+from django.shortcuts import render, get_object_or_404
+ 
 
 
 
@@ -101,10 +98,11 @@ def dropout_chart(request):
     )
     dropout_chart = dropout_fig.to_html(full_html=False)
 
-    # Example: Query to get average test scores by subject
-    test_scores_data = TestScore.objects.values('subject').annotate(avg_score=Avg('score'))
+    # Query to get average test scores by subject
+    # Update this line to correctly reference the subject name
+    test_scores_data = TestScore.objects.values('lesson__subject__name').annotate(avg_score=Avg('score'))
 
-    subjects = [data['subject'] for data in test_scores_data]
+    subjects = [data['lesson__subject__name'] for data in test_scores_data]
     avg_scores = [data['avg_score'] for data in test_scores_data]
 
     # Create a Plotly bar chart for test scores
@@ -121,6 +119,7 @@ def dropout_chart(request):
         'dropout_chart': dropout_chart,
         'test_scores_chart': test_scores_chart
     })
+
 
 def enrollment_comparison_chart(request):
     # Calculate enrollment rate for rural schools
@@ -153,31 +152,39 @@ def enrollment_comparison_chart(request):
         'enrollment_chart': enrollment_chart,
     })
     
-def calculate_metrics_and_charts(request):
+def education_metrics_view(request):
+    # Total Students
     total_students = Student.objects.count()
-    enrolled_students = Student.objects.filter(enrolled=True).count()
-    dropout_students = Student.objects.filter(dropout=True).count()
-    enrollment_rate = (enrolled_students / total_students) * 100 if total_students > 0 else 0
-    dropout_rate = (dropout_students / total_students) * 100 if total_students > 0 else 0
-    average_performance = TestScore.objects.aggregate(avg_score=Avg('score'))['avg_score'] or 0
-    performance_by_subject = TestScore.objects.values('subject').annotate(avg_score=Avg('score')).order_by('subject')
 
-    dropout_chart = generate_dropout_chart()  # This should generate the dropout chart using Plotly
-    test_scores_chart = generate_test_scores_chart()  # This should generate the test scores chart using Plotly
+    # Enrolled Students
+    enrolled_students = Student.objects.filter(enrolled=True).count()
+
+    # Dropout Students
+    dropout_students = Student.objects.filter(dropout=True).count()
+
+    # Enrollment Rate
+    enrollment_rate = (enrolled_students / total_students) * 100 if total_students > 0 else 0
+
+    # Dropout Rate
+    dropout_rate = (dropout_students / total_students) * 100 if total_students > 0 else 0
+
+    # Average Performance
+    average_performance = TestScore.objects.aggregate(avg_score=Avg('score'))['avg_score'] or 0
+
+    # Performance by Subject
+    performance_by_subject = TestScore.objects.values('subject').annotate(avg_score=Avg('score')).order_by('subject')
 
     context = {
         'total_students': total_students,
         'enrolled_students': enrolled_students,
-        'dropout_students': dropout_students,
         'enrollment_rate': enrollment_rate,
         'dropout_rate': dropout_rate,
         'average_performance': average_performance,
         'performance_by_subject': performance_by_subject,
-        'dropout_chart': dropout_chart,
-        'test_scores_chart': test_scores_chart,
     }
 
-    return render(request, 'combined_charts.html', context)
+    return render(request, 'education/metrics.html', context)
+
 
 
     # update
@@ -231,3 +238,34 @@ def average_test_score(request, student_id):
         'student': student,
         'average_score': average_score,
     })
+    
+    from django.shortcuts import render, get_object_or_404
+from .models import Student
+
+def student_detail(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    test_scores = TestScore.objects.filter(student=student).select_related('lesson')  # Preload lesson data
+    
+    # Prepare context to pass to the template
+    context = {
+        'student': student,
+        'test_scores': test_scores,
+    }
+    
+    return render(request, 'Education/student_detail.html', context)
+
+
+def students_by_school_view(request, school_id):
+    # Fetch students who belong to a specific school
+    students = Student.objects.filter(school__id=school_id)
+
+    # Render the template with the filtered students
+    return render(request, 'education/students_by_school.html', {'students': students})
+
+
+def student_profile_view(request, user_id):
+    # Fetch the student's profile based on the User's ID
+    student_profile = get_object_or_404(StudentProfile, user__id=user_id)
+
+    # Render the template with the profile data
+    return render(request, 'education/student_profile.html', {'student_profile': student_profile})

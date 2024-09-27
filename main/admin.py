@@ -1,12 +1,13 @@
 from django.contrib import admin
-from .models import Region, School, Student, TestScore, StudentProfile, LearningPath, TestScore
+from .models import Region, School, Student, TestScore, StudentProfile, LearningPath, TestScore, Subject, Lesson
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 
 # Register Region and School models
 admin.site.register(Region)
 admin.site.register(School)
-
+admin.site.register(Subject)
+admin.site.register(Lesson)
 # Define the resource class for Student import/export
 class StudentResource(resources.ModelResource):
     class Meta:
@@ -19,8 +20,6 @@ class StudentAdmin(ImportExportModelAdmin):
     list_display = ('name', 'gender', 'age', 'enrolled', 'dropout', 'school')
     search_fields = ['name']
 
-# Register TestScore model
-admin.site.register(TestScore)
 
 
 # update

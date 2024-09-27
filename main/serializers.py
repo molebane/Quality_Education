@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Region, School, Student, TestScore
+from .models import Region, School, Student, TestScore, StudentProfile, LearningPath
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,4 +20,14 @@ class StudentSerializer(serializers.ModelSerializer):
 class TestScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestScore
+        fields = '__all__'
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = '__all__'
+
+class LearningPathSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LearningPath
         fields = '__all__'
