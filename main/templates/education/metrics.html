@@ -1,50 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Education Metrics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styling */
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #007bff;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        h2,
+        h5 {
+            color: #007bff;
+        }
+
+        p {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .metrics-section {
+            margin-top: 20px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            margin-top: auto;
+            /* Pushes footer to the bottom */
+        }
+
+        footer a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h2>Education Metrics</h2>
-        <div class="row">
-            <div class="col-md-3">
-                <h5>Total Students</h5>
-                <p>{{ total_students }}</p>
-            </div>
-            <div class="col-md-3">
-                <h5>Enrolled Students</h5>
-                <p>{{ enrolled_students }}</p>
-            </div>
-            <div class="col-md-3">
-                <h5>Enrollment Rate</h5>
-                <p>{{ enrollment_rate }}%</p>
-            </div>
-            <div class="col-md-3">
-                <h5>Dropout Rate</h5>
-                <p>{{ dropout_rate }}%</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h5>Average Student Performance</h5>
-                <p>{{ average_performance }}</p>
-            </div>
-            <div class="col-md-6">
-                <h5>Performance by Subject</h5>
-                <ul>
-                    {% for subject in performance_by_subject %}
-                    <li>{{ subject.subject }}: {{ subject.avg_score }}</li>
-                    {% endfor %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'student_list' %}">
+                <img src="{% static 'image/logo.png' %}" alt="Logo" width="80" height="40" class="d-inline-block align-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_list' %}">Student</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'export_students_excel' %}">Export</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dropout_chart' %}">Dropout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'enrollment_comparison_chart' %}">Enrollment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'education_metrics' %}">Metrics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Login</a>
+                    </li>
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
 
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <h2>Education Metrics</h2>
+
+        <div class="row metrics-section">
+            <div class="col-md-3">
+                <div class="card">
+                    <h5>Total Students</h5>
+                    <p>{{ total_students }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <h5>Enrolled Students</h5>
+                    <p>{{ enrolled_students }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <h5>Enrollment Rate</h5>
+                    <p>{{ enrollment_rate }}%</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <h5>Dropout Rate</h5>
+                    <p>{{ dropout_rate }}%</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row metrics-section">
+            <div class="col-md-6">
+                <div class="card">
+                    <h5>Average Student Performance</h5>
+                    <p>{{ average_performance }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <h5>Performance by Subject</h5>
+                    <ul>
+                        {% for subject in performance_by_subject %}
+                        <li>{{ subject.subject }}: {{ subject.avg_score }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Education Metrics. All rights reserved.</p>
+            <p>
+                <a href="#">Privacy Policy</a> |
+                <a href="#">Terms of Service</a> |
+                <a href="#">Contact Us</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

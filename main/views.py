@@ -172,8 +172,7 @@ def education_metrics_view(request):
     average_performance = TestScore.objects.aggregate(avg_score=Avg('score'))['avg_score'] or 0
 
     # Performance by Subject
-    performance_by_subject = TestScore.objects.values('subject').annotate(avg_score=Avg('score')).order_by('subject')
-
+    performance_by_subject = TestScore.objects.values('lesson__subject__name').annotate(avg_score=Avg('score')).order_by('lesson__subject__name')
     context = {
         'total_students': total_students,
         'enrolled_students': enrolled_students,
